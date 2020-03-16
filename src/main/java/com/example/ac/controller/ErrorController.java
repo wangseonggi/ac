@@ -1,5 +1,6 @@
 package com.example.ac.controller;
 
+import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,14 +8,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class ErrorController {
 
     @RequestMapping(value = "/error22")
-    public ModelAndView loginError(Model model, HttpServletRequest request) {
+    public ModelAndView loginError(HttpServletRequest request, HttpServletResponse response) {
         AuthenticationException exception = (AuthenticationException)request.getSession().getAttribute("SPRING_SECURITY_LAST_EXCEPTION");
-        model.addAttribute("msg", exception.getMessage());
-        return new ModelAndView("error");
+
+        ModelAndView modelAndView = new ModelAndView("error");
+        modelAndView.addObject("msg", exception.getMessage());
+
+        return modelAndView;
     }
 }

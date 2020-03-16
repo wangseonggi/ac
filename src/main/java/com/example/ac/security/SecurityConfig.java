@@ -1,5 +1,6 @@
 package com.example.ac.security;
 
+import com.example.ac.security.handler.CustomAccessDeniedHandler;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -31,5 +32,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .hasAnyRole("admin")
                     .anyRequest()
                     .authenticated();
+
+        /**
+         * 自定义的异常处理
+         */
+        http
+                .exceptionHandling()
+                    .accessDeniedHandler(new CustomAccessDeniedHandler());
+//                    .authenticationEntryPoint();
     }
 }
