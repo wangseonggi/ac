@@ -1,6 +1,8 @@
 package com.example.ac.security.handler;
 
+import com.example.ac.security.util.HTTPUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -13,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 
+@Slf4j
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
     /**
@@ -28,11 +31,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
-        /**
-         * 根据content-type类型作不同的返回
-         */
-        String acceptString = request.getHeader("content-type");
-        if(acceptString != null && acceptString.contains("json")) {
+        if(HTTPUtils.isAjaxRequest(request)) {
             HashMap<String, String> map = new HashMap<>(2);
             map.put("uri", request.getRequestURI());
             map.put("msg", accessDeniedException.getMessage());
@@ -46,10 +45,9 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             printWriter.flush();
             printWriter.close();
         }
-        else {
-
+        else if (!response.isCommitted()) {// 非AJAX请求，跳转系统默认的403错误界面，在web.xml中配置
+            response.sendError(HttpServletResponse.SC_FORBIDDEN,
+                    accessDeniedException.getMessage());
         }
-
-
     }
 }
