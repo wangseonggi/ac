@@ -2,14 +2,22 @@ package com.example.ac.security;
 
 import com.example.ac.security.handler.CustomAccessDeniedHandler;
 import com.example.ac.security.handler.CustomAuthenticationEntryPoint;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    UserDetailsService customUserDetailsService;
 
     /**
      * Http安全配置
@@ -54,5 +62,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("admin").password("123456").roles("admin")
                 .and()
                 .withUser("user").password("123456").roles("user");
+    }
+
+    /**
+     * 使用security自带的provider
+     */
+    @Bean
+    DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+        daoAuthenticationProvider.setUserDetailsService(customUserDetailsService);
+
+        return daoAuthenticationProvider;
     }
 }

@@ -2,12 +2,12 @@ resources: # 指定静态资源的路径
   static-locations: classpath:/static/,classpath:/views/
   cache-period: 0
 
-#spring:
-#  datasource:
-#    username: root
-#    password: 123456
-#    url: jdbc:mysql://localhost:3306/ym?useUnicode=true&useAffectedRows=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
-#    driver-class-name: com.mysql.cj.jdbc.Driver
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/ym_new?useUnicode=true&useAffectedRows=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
 thymeleaf:
   cache: false
@@ -15,7 +15,7 @@ thymeleaf:
 # mybatis 控制台打印sql
 logging:
   level:
-    com.example.dao: debug
+    com.example.ac.security.dao: debug
 
 devtools:
   restart:
