@@ -1,5 +1,6 @@
 package com.example.ac.security.dao;
 
+import com.example.ac.security.bean.SysRole;
 import com.example.ac.security.bean.SysUser;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.test.context.junit4.SpringRunner;
 
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
+
+import java.util.List;
 
 
 @RunWith(SpringRunner.class)
@@ -22,7 +25,15 @@ public class SysUserDaoTest {
     @Test
     public void selectSysUserByName() {
         String username = "admin";
-        SysUser user = sysUserDao.findSysUserByname(username);
+        SysUser user = sysUserDao.findSysUserByName(username);
         Assert.assertNotNull(user);
+    }
+
+
+    @Test
+    public void getSysRoleByUserId() {
+        int userId = 2;
+        List<SysRole> list = sysUserDao.getSysRoleByUserId(userId);
+        Assert.assertEquals(2,list.size());
     }
 }
