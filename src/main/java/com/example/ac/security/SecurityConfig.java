@@ -1,5 +1,8 @@
 package com.example.ac.security;
 
+import com.example.ac.security.component.CustomAccessDecisionManager;
+import com.example.ac.security.component.CustomMetadataSource;
+import com.example.ac.security.filter.CustomSecurityInterceptor;
 import com.example.ac.security.handler.CustomAccessDeniedHandler;
 import com.example.ac.security.handler.CustomAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +15,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 @EnableWebSecurity
+//@EnableWebSecurity(debug = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     UserDetailsService customUserDetailsService;
 
+    @Autowired
+    CustomMetadataSource customMetadataSource;
     /**
      * Http安全配置
      */
@@ -29,6 +36,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          */
         http
                 .csrf().disable();
+
+        /**
+         * 配置自定义权限过滤器
+         */
+        http
+                .addFilterAt(getCustomSecurityInterceptor() , FilterSecurityInterceptor.class);
+
         /**
          * 表单登录：使用默认的表单登录页面和登录端点/login进行登录
          * 出登录：使用默认的退出登录端点/logout退出登录
@@ -37,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .formLogin()
                     .loginPage("/login")
+//                    .successHandler()
                     .successForwardUrl("/index")
                     .permitAll()
                     .and()
@@ -85,5 +100,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         daoAuthenticationProvider.setUserDetailsService(customUserDetailsService);
 
         return daoAuthenticationProvider;
+    }
+
+    /**
+     * 过滤器
+     * @return
+     */
+    @Bean
+    public CustomSecurityInterceptor getCustomSecurityInterceptor() {
+        CustomSecurityInterceptor interceptor = new CustomSecurityInterceptor();
+        interceptor.setAccessDecisionManager(new CustomAccessDecisionManager());
+        interceptor.setSecurityMetadataSource(customMetadataSource);
+        try {
+            interceptor.setAuthenticationManager(this.authenticationManagerBean());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return interceptor;
     }
 }
