@@ -1,4 +1,4 @@
-package com.example.ac.security.dao;
+package com.example.ac.security.mapper;
 
 import com.example.ac.security.bean.SysRole;
 import org.apache.ibatis.annotations.Mapper;
@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
-public interface SysRoleDao {
+public interface SysRoleMapper {
 
     @Select("select distinct(a.mc) as mc\n" +
             "from sys_role a, sys_role_menu b \n" +

@@ -1,4 +1,4 @@
-package com.example.ac.security.dao;
+package com.example.ac.security.mapper;
 
 import com.example.ac.security.bean.SysRole;
 import com.example.ac.security.bean.SysUser;
@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 @Mapper
-public interface SysUserDao {
+public interface SysUserMapper {
 
     @Select("select id, username, password, nc, xb, dh, dzyx, zhyxq, mmyxq, zt, zjdlip from sys_user s where s.username=#{userName}")
     SysUser findSysUserByName(String username);

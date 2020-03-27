@@ -1,10 +1,7 @@
 package com.example.ac.security.service;
 
 import com.example.ac.security.bean.SysMenu;
-import com.example.ac.security.bean.SysRole;
-import com.example.ac.security.bean.SysUser;
-import com.example.ac.security.dao.SysMenuDao;
-import com.example.ac.security.dao.SysUserDao;
+import com.example.ac.security.mapper.SysMenuMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -14,9 +11,9 @@ import java.util.List;
 public class SysMenuService {
 
     @Resource
-    private SysMenuDao sysMenuDao;
+    private SysMenuMapper sysMenuMapper;
 
     public List<SysMenu> getMenus(String url) {
-        return sysMenuDao.getSysMenuByURL(url);
+        return sysMenuMapper.getSysMenuByURL(url);
     }
 }

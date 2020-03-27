@@ -2,7 +2,7 @@ package com.example.ac.security.service;
 
 import com.example.ac.security.bean.SysRole;
 import com.example.ac.security.bean.SysUser;
-import com.example.ac.security.dao.SysUserDao;
+import com.example.ac.security.mapper.SysUserMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,13 +12,13 @@ import java.util.List;
 public class SysUserService {
 
     @Resource
-    private SysUserDao sysUserDao;
+    private SysUserMapper sysUserMapper;
 
     public SysUser findUserByName(String username) {
-        return sysUserDao.findSysUserByName(username);
+        return sysUserMapper.findSysUserByName(username);
     }
 
     public List<SysRole> getRoles(int userId) {
-        return sysUserDao.getSysRoleByUserId(userId);
+        return sysUserMapper.getSysRoleByUserId(userId);
     }
 }

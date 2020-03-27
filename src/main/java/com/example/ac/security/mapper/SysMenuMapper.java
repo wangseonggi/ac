@@ -1,16 +1,13 @@
-package com.example.ac.security.dao;
+package com.example.ac.security.mapper;
 
 import com.example.ac.security.bean.SysMenu;
-import com.example.ac.security.bean.SysRole;
-import com.example.ac.security.bean.SysUser;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
 @Mapper
-public interface SysMenuDao {
+public interface SysMenuMapper {
 
     @Select("SELECT id, pid, mc, px, zt, cjsj, gxsj \n" +
             "FROM sys_menu WHERE url = #{url}")
